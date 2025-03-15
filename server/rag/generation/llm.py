@@ -1,6 +1,9 @@
 import os
 from openai import OpenAI
-from zhipuai import ZhipuAI
+# ZhipuAI는 필요할 때만 임포트
+LLM_NAME = os.getenv('LLM_NAME', 'OpenAI')
+if LLM_NAME in ['ZhipuAI', 'DeepSeek', 'Moonshot']:
+    from zhipuai import ZhipuAI
 from server.logger.logger_config import my_logger as logger
 
 

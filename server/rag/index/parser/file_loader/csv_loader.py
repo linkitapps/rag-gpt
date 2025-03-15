@@ -1,10 +1,13 @@
 import os
-from llama_parse import LlamaParse
 import pandas as pd
 from server.logger.logger_config import my_logger as logger
 
-USE_LLAMA_PARSE = int(os.getenv('USE_LLAMA_PARSE'))
-LLAMA_CLOUD_API_KEY = os.getenv('LLAMA_CLOUD_API_KEY')
+USE_LLAMA_PARSE = int(os.getenv('USE_LLAMA_PARSE', '0'))
+LLAMA_CLOUD_API_KEY = os.getenv('LLAMA_CLOUD_API_KEY', '')
+
+# LlamaParse는 USE_LLAMA_PARSE가 1일 때만 임포트합니다
+if USE_LLAMA_PARSE:
+    from llama_parse import LlamaParse
 
 
 class AsyncCsvLoader:

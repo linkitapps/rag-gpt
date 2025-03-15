@@ -11,7 +11,11 @@ from server.constant.constants import (OPENAI_EMBEDDING_MODEL_NAME,
                                        CHROMA_DB_DIR, CHROMA_COLLECTION_NAME,
                                        OLLAMA_EMBEDDING_MODEL_NAME)
 from server.logger.logger_config import my_logger as logger
-from server.rag.index.embedder.zhipuai_embedder import ZhipuAIEmbeddings
+
+# ZhipuAI Embeddings는 필요할 때만 임포트
+LLM_NAME = os.getenv('LLM_NAME', 'OpenAI')
+if LLM_NAME in ['ZhipuAI', 'DeepSeek', 'Moonshot']:
+    from server.rag.index.embedder.zhipuai_embedder import ZhipuAIEmbeddings
 
 
 class DocumentEmbedder:
@@ -22,7 +26,8 @@ class DocumentEmbedder:
         if self.llm_name == 'OpenAI':
             embeddings = OpenAIEmbeddings(
                 openai_api_key=os.getenv('OPENAI_API_KEY'),
-                model=OPENAI_EMBEDDING_MODEL_NAME)
+                model=OPENAI_EMBEDDING_MODEL_NAME,
+                openai_proxy=os.getenv('OPENAI_PROXY', None))
         elif self.llm_name == 'ZhipuAI':
             embeddings = ZhipuAIEmbeddings(
                 api_key=os.getenv('ZHIPUAI_API_KEY'),
